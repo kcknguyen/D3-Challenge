@@ -4,7 +4,7 @@ const svgWidth = 960;
 const svgHeight = 640;
 
 // Define the chart's margins as an object
-const margin = {
+const chartmargin = {
   top: 20,
   right: 40,
   bottom: 80,
@@ -12,8 +12,8 @@ const margin = {
 };;
 
 // Define dimensions of the chart area
-const width = svgWidth - margin.left - margin.right;
-const height = svgHeight - margin.top - margin.bottom;
+const width = svgWidth - chartmargin.left - margin.right;
+const height = svgHeight - chartmargin.top - margin.bottom;
 
 // Select body, append SVG area to it, and set the dimensions
 var svg = d3
@@ -25,7 +25,7 @@ var svg = d3
   // Append a group to the SVG area and shift ('translate') it to the right and down to adhere
 // to the margins set in the "chartMargin" object.
 var chartGroup = svg.append("g")
-.attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
+.attr("transform", `translate(${chartmargin.left}, ${chartmargin.top})`);
 
 // Load data from hours-of-tv-watched.csv
 //d3.csv("hours-of-tv-watched.csv").then(function(tvData) {
