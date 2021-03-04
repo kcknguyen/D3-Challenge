@@ -1,10 +1,10 @@
 // @TODO: YOUR CODE HERE!
 // Define SVG area dimensions
-const svgWidth = 960;
-const svgHeight = 640;
+var svgWidth = 960;
+var svgHeight = 640;
 
 // Define the chart's margins as an object
-const chartmargin = {
+const chartMargin = {
   top: 20,
   right: 40,
   bottom: 80,
@@ -12,8 +12,8 @@ const chartmargin = {
 };;
 
 // Define dimensions of the chart area
-const width = svgWidth - chartmargin.left - margin.right;
-const height = svgHeight - chartmargin.top - margin.bottom;
+const chartWidth = svgWidth - chartMargin.left - chartMargin.right;
+const chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
 // Select body, append SVG area to it, and set the dimensions
 var svg = d3
@@ -25,15 +25,104 @@ var svg = d3
   // Append a group to the SVG area and shift ('translate') it to the right and down to adhere
 // to the margins set in the "chartMargin" object.
 var chartGroup = svg.append("g")
-.attr("transform", `translate(${chartmargin.left}, ${chartmargin.top})`);
+.attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
+// Initial Params
+var chosenXAxis = "poverty";
+var chosenYAxis = "healthcare";
 // Load data from hours-of-tv-watched.csv
-//d3.csv("hours-of-tv-watched.csv").then(function(tvData) {
+d3.csv("./assets/data/data.csv").then(function(stateData) {
 
-// Print the tvData
-//console.log(tvData);
+// Print the stateData
+//console.log(stateData);
+//});
 
-// Cast the hours value to a number for each piece of tvData
+// Step 1: Parse Data/Cast as numbers
+    // ==============================
+    stateData.forEach(function(data) {
+      data.poverty = +data.poverty;
+      data.healthcare = +data.healthcare;
+    });
+
+    // Step 2: Create scale functions
+    // ==============================
+    var xLinearScale = d3.scaleLinear()
+      .domain([20, d3.max(stateData, d => d.poverty)])
+      .range([0, width]);
+
+    var yLinearScale = d3.scaleLinear()
+      .domain([0, d3.max(stateData, d => d.healthcare)])
+      .range([height, 0]);
+
+      //Step 3: Create axis functions
+      // ==============================
+      var bottomAxis = d3.axisBottom(xLinearScale);
+      var leftAxis = d3.axisLeft(yLinearScale);
+  
+      // Step 4: Append Axes to the chart
+    // ==============================
+    chartGroup.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(bottomAxis);
+
+    chartGroup.append("g")
+      .call(leftAxis);
+
+
+  // Step 5: Create Circles
+    // ==============================
+    var circlesGroup = chartGroup.selectAll("circle")
+    .data(stateData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => xLinearScale(d.poverty))
+    .attr("cy", d => yLinearScale(d.healthcare))
+    .attr("r", "15")
+    .attr("fill", "pink")
+    .attr("opacity", ".5");
+
+
+
+    var toolTip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([80, -60])
+    .html(function(d) {
+      return (`${d.abbr}<br>poverty: ${d.poverty}<br>Healthcare: ${d.healthcare}`);
+    });
+
+  // Step 7: Create tooltip in the chart
+  // ==============================
+  chartGroup.call(toolTip);
+
+  // Step 8: Create event listeners to display and hide the tooltip
+  // ==============================
+  circlesGroup.on("click", function(data) {
+    toolTip.show(data, this);
+  })
+    // onmouseout event
+    .on("mouseout", function(data, index) {
+      toolTip.hide(data);
+    });
+
+  // Create axes labels
+  chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left + 40)
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .attr("class", "axisText")
+    .text("Healthcare vs Poverty");
+
+  chartGroup.append("text")
+    .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+    .attr("class", "axisText")
+    .text("In poverty (%)");
+}).catch(function(error) {
+  console.log(error);
+});
+
+
+    // Cast the hours value to a number for each piece of tvData
 //tvData.forEach(function(data) {
   //data.hours = +data.hours;
 //});
