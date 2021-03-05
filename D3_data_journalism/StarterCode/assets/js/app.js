@@ -53,11 +53,11 @@ function xScale(Data, chosenXAxis) {
  // function used for updating x-scale var upon click on axis label
 function yScale(Data, chosenYAxis) {
   // create scales
-  var YLinearScale = d3.scaleLinear()
+  var yLinearScale = d3.scaleLinear()
     .domain([d3.min(Data, d => d[chosenYAxis]) * 0.8,
       d3.max(Data, d => d[chosenYAxis]) * 1.2
     ])
-    .range([0, width]);
+    .range([0, height]);
 
   return yLinearScale; 
 
@@ -91,20 +91,20 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYA
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]));
-    .attr("cx", d => newYScale(d[chosenYAxis]));
+    .attr("cy", d => newYScale(d[chosenYAxis]));
   return circlesGroup;
 }
 
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, circlesGroup) {
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
   var label;
 
   if (chosenXAxis === "healthcare") {
-    label = "healthcare:";
+    label = "Lacks Healthcare (%)";
   }
   else {
-    label = "# of Albums:";
+    label = "poverty:";
   }
 
   var toolTip = d3.tip()
