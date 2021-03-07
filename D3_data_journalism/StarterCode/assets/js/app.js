@@ -23,7 +23,7 @@ var svg = d3
   .attr("width", svgWidth);
 
 
-  // Append a group to the SVG area and shift ('translate') it to the right and down to adhere
+// Append a group to the SVG area and shift ('translate') it to the right and down to adhere
 // to the margins set in the "chartMargin" object.
 var chartGroup = svg.append("g")
 .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
@@ -36,7 +36,7 @@ d3.csv("./assets/data/data.csv").then(function(stateData) {
  
 // Print the Data
 //console.log(data);
-});
+//});
 //Step 2: Create scale functions
 const xLinearScale = d3.scaleLinear()
   .domain([20, d3.max(stateData, d => d.age)])
@@ -77,7 +77,7 @@ chartGroup.append("g")
 .attr("fill", "white")
 .classed("stateText", true)
 .attr("opacity", 0.75)
-.attr("font-weight","bold"
+.attr("font-weight","bold")
 .attr("alignment-baseline", "central");
 
 chartGroup.append("text")
@@ -95,10 +95,11 @@ chartGroup.append("text")
   .attr("font-size", "16px")
   .attr("fill", "black")
   .style("font-weight", "bold")
-  .text("Smoker (%) ");  
-});.catch(function(error){
+  .text("Smoker (%) ") 
+  .catch(function(error){
   console.log(error);
 });
+})})
 // // Initial Params
 // var chosenXAxis = "poverty";
 // var chosenYAxis = "healthcare";
@@ -404,14 +405,5 @@ chartGroup.append("text")
 //     .attr("x", 0 - (height / 2))
 //     .attr("dy", "1em")
 //     .attr("class", "axisText")
-//     .text("Healthcare vs Poverty");
-
-//   chartGroup.append("text")
-//     .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
-//     .attr("class", "axisText")
-//     .text("In poverty (%)");
-// }).catch(function(error) {
-//   console.log(error);
-// });
-
+/////////     .text("Healthcare vs Poverty")
 
