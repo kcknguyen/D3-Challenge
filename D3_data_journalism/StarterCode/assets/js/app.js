@@ -19,8 +19,8 @@ const chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 var svg = d3
   .select("#scatter")
   .append("svg")
-  .attr("height", svgHeight)
-  .attr("width", svgWidth);
+  .attr("width", svgWidth)
+  .attr("height", svgHeight);
 
 
 // Append a group to the SVG area and shift ('translate') it to the right and down to adhere
@@ -33,18 +33,18 @@ d3.csv("./assets/data/data.csv").then(function(stateData) {
   stateData.forEach(function(data) {
     data.age = +data.age;
     data.smokes = data.smokes;
- 
+  });
 // Print the Data
 //console.log(data);
 //});
 //Step 2: Create scale functions
 const xLinearScale = d3.scaleLinear()
-  .domain([20, d3.max(stateData, d => d.age)])
-  .range([0, width]);
+  .domain(20, d3.max(stateData, d => d.age))
+  .range([0, chartWidth]);
 
 const yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(stateData, d => d.smokes)])
-    .range([height, 0]);
+    .domain(6, d3.max(stateData, d => d.smokes))
+    .range([chartHeight, 0]);
 
 //       //Step 3: Create axis functions
 //       // ==============================
@@ -59,7 +59,7 @@ chartGroup.selectAll("circle")
 .enter()
 .append("circle")
 .attr("cx", d=>xLinearScale(d.age))
-.attr("cy", d=>yxLinearScale(d.smokes))
+.attr("cy", d=>yLinearScale(d.smokes))
 .attr("r", "10")
 .attr("stroke-width", "1")
 .classed("stateCircle", true)
@@ -72,7 +72,7 @@ chartGroup.append("g")
 .append("text")
 .text(d=>d.abbr)
 .attr("x", d=>xLinearScale(d.age))
-.attr("y", d=>yxLinearScale(d.smokes))
+.attr("y", d=>yLinearScale(d.smokes))
 .attr("front-family", "sans-serif")
 .attr("fill", "white")
 .classed("stateText", true)
@@ -81,16 +81,16 @@ chartGroup.append("g")
 .attr("alignment-baseline", "central");
 
 chartGroup.append("text")
-  .attr("transform", 'translate(${width /2}, ${height + margin.top + 13})')
+  .attr("transform", 'translate(${width /2}, ${height + 20})')
   .attr("text-anchor", "middle")
   .attr("font-size", "16px")
   .attr("fill", "black")
   .text("Age");
 
   chartGroup.append("text")
+  .attr("x", -100)
+  .attr("y", 200)
   .attr("transform", "rotate(-90)")
-  .attr("y", 0 - margin.left)
-  .attr("x", 0 - (height / 2))
   .attr("text-anchor", "middle")
   .attr("font-size", "16px")
   .attr("fill", "black")
@@ -98,8 +98,10 @@ chartGroup.append("text")
   .text("Smoker (%) ") 
   .catch(function(error){
   console.log(error);
+}).catch(function(error) {
+    console.log(error);
 });
-})})
+
 // // Initial Params
 // var chosenXAxis = "poverty";
 // var chosenYAxis = "healthcare";
@@ -407,3 +409,4 @@ chartGroup.append("text")
 //     .attr("class", "axisText")
 /////////     .text("Healthcare vs Poverty")
 
+})
