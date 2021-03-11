@@ -7,7 +7,7 @@ var svgHeight = 640;
 const chartMargin = {
   top: 20,
   right: 40,
-  bottom: 80,
+  bottom: 100,
   left: 100
 };
 
@@ -32,14 +32,14 @@ var chartGroup = svg.append("g")
 d3.csv("./assets/data/data.csv").then(function(stateData) {
   stateData.forEach(function(data) {
     data.age = +data.age;
-    data.smokes = data.smokes;
+    data.smokes = +data.smokes;
   });
 // Print the Data
 //console.log(data);
 //});
 //Step 2: Create scale functions
 const xLinearScale = d3.scaleLinear()
-  .domain(20, d3.max(stateData, d => d.age))
+  .domain([30, d3.max(stateData, d => d.age)])
   .range([0, chartWidth]);
 
 const yLinearScale = d3.scaleLinear()
@@ -52,7 +52,7 @@ const xAxis = d3.axisBottom(xLinearScale);
 const yAxis = d3.axisLeft(yLinearScale);
 
 chartGroup.append("g")
-  .attr("transform", 'translate(0, ${height})')
+  .attr("transform", `translate(0, ${chartHeight})`)
   .call(xAxis);
 
 chartGroup.append("g")
@@ -74,7 +74,7 @@ var circlesGroup = chartGroup.selectAll("circle")
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return (`${d.rockband}<br>age: ${d.age}<br>Hits: ${d.smokes}`);
+        return (`${d.abbr}<br>age: ${d.age}<br>smokes: ${d.smokes}`);
       });
 
     // Step 7: Create tooltip in the chart
@@ -108,15 +108,15 @@ chartGroup.append("g")
 .attr("alignment-baseline", "central");
 
 chartGroup.append("text")
-  .attr("transform", 'translate(${width /2}, ${height + 20})')
+  .attr("transform", `translate(${chartWidth /2}, ${chartHeight + 50})`)
   .attr("text-anchor", "middle")
   .attr("font-size", "16px")
   .attr("fill", "black")
   .text("Age");
 
 chartGroup.append("text")
-  .attr("x", -100)
-  .attr("y", 200)
+  .attr("x", -120)
+  .attr("y", -50)
   .attr("transform", "rotate(-90)")
   .attr("text-anchor", "middle")
   .attr("font-size", "16px")
