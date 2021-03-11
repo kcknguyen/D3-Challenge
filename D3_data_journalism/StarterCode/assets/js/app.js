@@ -68,29 +68,6 @@ var circlesGroup = chartGroup.selectAll("circle")
 .classed("stateCircle", true)
 .attr("opacity", 0.75);
 
-// Step 6: Initialize tool tip
-    // ==============================
-    var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(function(d) {
-        return (`${d.abbr}<br>age: ${d.age}<br>smokes: ${d.smokes}`);
-      });
-
-    // Step 7: Create tooltip in the chart
-    // ==============================
-    chartGroup.call(toolTip);
-
-    // Step 8: Create event listeners to display and hide the tooltip
-    // ==============================
-    circlesGroup.on("click", function(data) {
-      toolTip.show(data, this);
-    })
-      // onmouseout event
-      .on("mouseout", function(data, index) {
-        toolTip.hide(data);
-      });
-
 
 chartGroup.append("g")
 .selectAll ('text')
